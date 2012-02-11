@@ -1,0 +1,3 @@
+[% FOREACH t IN textlist -%]
+				<li><a href="[% c.uri_for( 'text', t.id ) %]">[% t.name %]</a></li>
+[% END -%]
