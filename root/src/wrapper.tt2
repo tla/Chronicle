@@ -6,7 +6,8 @@
 	</head>
 	<body>
 		<div id="topbanner">
-		
+			<h1>Ժամանակագրութիւն</h1>
+			<h2>Excerpts from the <span class="texttitle">Chronicle</span> of Matthew of Edessa</h2>
 		</div>
 		<div id="sidenav">
 			<h2><a href="abouttext">About the <span class="texttitle">Chronicle</span></a></h2>

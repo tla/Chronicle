@@ -13,11 +13,19 @@ h1 {
     padding: 0;
 }
 #topbanner {
-	height: 200px;
+	height: 150px;
 	left: 0px;
 	top: 0px;
 	background: url('/images/baldwin_edessa_banner.jpg');
 	z-index: -1;
+	color: #111111;
+	text-align: right;
+}
+#topbanner h1 {
+	font-size: 64px;
+}
+#topbanner h2 {
+	font-size: 24px;
 }
 #sidenav {
 	width: 320px;
@@ -26,7 +34,26 @@ h1 {
 	color: #ffffff;
 	background-color: #785378;
 }
-#msinfo {
+#sidenav a:link {
+	color: #ffffff;
+}
+#sidenav a:visited {
+	color: #f1d4f1;
+}
+#sidenav a:hover {
+	color: #d1bad1;
+}
+#sidenav a:active {
+	color: #d1bad1;
+}
+#sidenav ul {
+	list-style-type: none;
+}
+#sidenav li {
+	margin-bottom: 8px;
+}
+#pagecontent {
+	padding-top: 30px;
 	margin-left: 420px;
 }
 .section {

@@ -1,0 +1,4 @@
+<div id="pagecontent">
+	<h2>About this site</h2>
+	<p>The purpose of this site is to explore the possibilities of an online critical edition of a relatively widely-copied medieval text.  The site itself is written in the Perl Catalyst framework, and the data is taken from a set of source files in TEI XML.  The source code for the site may be found <a href="https://github.com/tla/Chronicle/">on Github</a>.
+	</p>
