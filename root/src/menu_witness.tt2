@@ -1,0 +1,3 @@
+[% FOREACH wit IN witnesses -%]
+				<li><a href="[% c.uri_for( 'witness', wit.sigil ) %]">[% wit.name %]</a></li>
+[% END -%]

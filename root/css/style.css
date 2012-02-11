@@ -1,0 +1,88 @@
+body { 
+    margin: 0; 
+    padding: 20px; 
+    font: 1em Palatino, Times, serif; 
+    font-size: 85%; 
+    color: #666;
+}
+h1 {
+    color: #222222;
+    font-size: 24px;
+    font-weight: 100;
+    margin: 0 0 17px;
+    padding: 0;
+}
+#topbanner {
+	height: 200px;
+	left: 0px;
+	top: 0px;
+	background: url('/images/baldwin_edessa_banner.jpg');
+	z-index: -1;
+}
+#sidenav {
+	width: 320px;
+	float: left;
+	padding: 20px;
+	color: #ffffff;
+	background-color: #785378;
+}
+#msinfo {
+	margin-left: 420px;
+}
+.section {
+	float: left;
+	position: relative; left: -30px;
+}
+p {
+	line-height: 150%;
+	text-indent: 15px;
+}
+p.followpg {
+	text-indent: 0px;
+}
+#sourcetext {
+	margin-left: 450px;
+	margin-top: 40px;
+}
+table.pagecolumn td.left {
+	vertical-align: bottom;
+	width: 350px;
+}
+table.pagecolumn td.right {
+	vertical-align: top;
+	width: 350px;
+}
+#paralleltext td {
+	vertical-align: top;
+	padding: 20px;
+}
+.texttitle {
+	font-style: italic;
+}
+.textauthor {
+	font-style: italic;
+}
+.number {
+	text-decoration: overline;
+}
+.pagenum {
+	border-top: 1px solid #111111;
+	border-left: 1px solid #111111;
+	border-style: solid;
+	margin: 10px;
+	padding: 10px;
+	width: 400px;
+}
+.expansion {
+	font-style: italic;
+}
+.highlight {
+	color: #dd0000;
+	font-size: 150%;
+}
+.addition {
+	color: #00dd00;
+}
+.deletion {
+	text-decoration: line-through;
+}

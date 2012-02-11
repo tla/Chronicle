@@ -1,0 +1,7 @@
+<div id="msinfo">
+	<h3>[% textidentifier %]</h3>
+	[% textdescription %]
+</div>
+<div id="sourcetext">
+	[% textcontent %]
+</div>
