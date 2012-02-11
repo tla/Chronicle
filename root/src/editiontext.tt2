@@ -1,4 +1,4 @@
-<div id="editiondisplay">
+<div id="pagecontent">
 <h3>[% textname %]</h3>
 <table id="paralleltext">
 [% FOREACH pg IN paragraphs -%]

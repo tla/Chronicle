@@ -1,4 +1,4 @@
-<div id="msinfo">
+<div id="pagecontent">
 	<h3>[% textidentifier %]</h3>
 	[% textdescription %]
 </div>
