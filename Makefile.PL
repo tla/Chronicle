@@ -12,13 +12,20 @@ all_from 'lib/Chronicle.pm';
 requires 'Catalyst::Runtime' => '5.90007';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
+requires 'Catalyst::Plugin::Unicode::Encoding';
 requires 'Catalyst::Action::RenderView';
+requires 'Catalyst::View::TT';
 requires 'Moose';
 requires 'MooseX::Types::Path::Class';
 requires 'namespace::autoclean';
 requires 'Config::General'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats
+requires 'File::BaseName';
+requires 'Path::Class::Dir';
+requires 'Path::Class::File';
 requires 'Text::TEI::Collate';
+requires 'XML::LibXML';
+requires 'XML::LibXML::XPathContext';
 test_requires 'Test::More' => '0.88';
 catalyst;
 
