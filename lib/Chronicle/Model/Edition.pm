@@ -74,14 +74,69 @@ sub paragraphs {
 sub process_original {
 	my( $self, $pgel ) = @_;
 	my $xpc = _xpc_for_el( $pgel );
-	# First iteration: just get the lemmata out.
+	my $note_ctr = 1;
 	my @words;
-	foreach my $lem ( $xpc->findnodes( './/tei:lem' ) ) {
-		foreach my $w ( $xpc->findnodes( 'tei:w', $lem ) ) {
-			push( @words, $w->textContent );
+	foreach my $app ( $xpc->findnodes( 'descendant::tei:app' ) ) {
+		if( $xpc->exists( 'tei:lem', $app ) ) {
+			my @lemma;
+			# Process the lemma and any apparatus
+			foreach my $w ( $xpc->findnodes( 'tei:lem/tei:w', $app ) ) {
+				push( @lemma, $w->textContent );
+			}
+			my $lemmatext = join( ' ', @lemma );
+			# Does the lemma have sibling rdgs? If so, we need to make an apparatus.
+			if( $lemmatext && $xpc->exists( 'tei:rdg', $app ) ) {
+				my %readings;
+				# Collect the readings
+				foreach my $rdg ( $xpc->findnodes( 'tei:rdg', $app ) ) {
+					my @rdgtext;
+					foreach my $w ( $xpc->findnodes( 'tei:w', $rdg ) ) {
+						push( @rdgtext, $w->textContent );
+					}
+					my @wits = _parse_wit_string( $rdg->getAttribute('wit') );
+					$readings{join(' ', @rdgtext )} = \@wits;
+				}
+				## TODO Look ahead for empty lemmata
+				# Arrange the readings into our JS arguments
+				# Function will be:
+				# showApparatus( lemmatext, [ reading, wit, wit ], [ reading, wit, wit ], ... )
+				my @js_arguments = ( 'showApparatus(', "'$lemmatext'," );
+				foreach my $rdgtext ( keys %readings ) {
+					my @listargs = ( $rdgtext );
+					push( @listargs, @{$readings{$rdgtext}} );
+					my $listrep = join( ', ', map { "'$_'" } @listargs );
+					push( @js_arguments, "[ $listrep ]" );
+				}
+				push( @js_arguments, ');' );
+				push( @words, sprintf( '<span class="lemma" onClick="%s">%s</span>',
+					join( ' ', @js_arguments ), $lemmatext ) );
+			} else {
+				push( @words, $lemmatext ) if $lemmatext;
+			}
+		} else {
+			# This must be a witStart or witEnd - add some sigil plus apparatus.
+			# TODO add onClick to show the content
+			push( @words, "<span class=\"witborder\">\x{2020}</span>" );
+		}
+		## Process notes
+		if( $xpc->exists( 'tei:note', $app ) ) {
+			foreach my $note_el ( $xpc->findnodes( 'tei:note', $app ) ) {
+				my $spantag = 'span class="editnote" onclick="showNote(\'';
+				my $notetext = $note_el->textContent();
+				$notetext =~ s!'!\\'!g;
+				$spantag .= $notetext . '\')"';
+				push( @words, "<$spantag>$note_ctr</span>");
+				$note_ctr++;
+			}
 		}
 	}
 	return join( ' ', @words );
+}
+
+sub _parse_wit_string {
+	my @wits = split( /\s+/, $_[0] );
+	map { s/^\#// } @wits;
+	return @wits;
 }
 
 sub process_translation {

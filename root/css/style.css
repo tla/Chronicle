@@ -56,6 +56,18 @@ h1 {
 	padding-top: 30px;
 	margin-left: 420px;
 }
+.lemma {
+	color: #785378;
+	text-decoration: underline;
+}
+.editnote {
+	vertical-align: baseline;
+	font-size: 0.8em;
+	position: relative;
+	top: -0.4em;
+	color: #785378;
+	text-decoration: underline;
+}
 .section {
 	float: left;
 	position: relative; left: -30px;
