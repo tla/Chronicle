@@ -77,22 +77,30 @@ sub process_original {
 	my $note_ctr = 1;
 	my @words;
 	foreach my $app ( $xpc->findnodes( 'descendant::tei:app' ) ) {
+		my $lemmatext;
 		if( $xpc->exists( 'tei:lem', $app ) ) {
 			my @lemma;
 			# Process the lemma and any apparatus
 			foreach my $w ( $xpc->findnodes( 'tei:lem/tei:w', $app ) ) {
 				push( @lemma, $w->textContent );
 			}
-			my $lemmatext = join( ' ', @lemma );
+			$lemmatext = join( ' ', @lemma );
 			# Does the lemma have sibling rdgs? If so, we need to make an apparatus.
 			if( $lemmatext && $xpc->exists( 'tei:rdg', $app ) ) {
 				my %readings;
 				# Collect the readings
 				foreach my $rdg ( $xpc->findnodes( 'tei:rdg', $app ) ) {
 					my @rdgtext;
+					foreach my $lac ( $xpc->findnodes( 
+						'tei:lacunaStart|tei:lacunaEnd', $rdg ) ) {
+						# Make a "reading" that is the lacuna.
+						push( @rdgtext, $lac->nodeName eq 'lacunaStart'
+							? '(lacuna begins)' : '(lacuna ends)' );
+					}
 					foreach my $w ( $xpc->findnodes( 'tei:w', $rdg ) ) {
 						push( @rdgtext, $w->textContent );
 					}
+					push( @rdgtext, '(omitted)' ) unless @rdgtext;
 					my @wits = _parse_wit_string( $rdg->getAttribute('wit') );
 					$readings{join(' ', @rdgtext )} = \@wits;
 				}
@@ -100,16 +108,15 @@ sub process_original {
 				# Arrange the readings into our JS arguments
 				# Function will be:
 				# showApparatus( lemmatext, [ reading, wit, wit ], [ reading, wit, wit ], ... )
-				my @js_arguments = ( 'showApparatus(', "'$lemmatext'," );
+				my @js_arguments = ( "'$lemmatext'" );
 				foreach my $rdgtext ( keys %readings ) {
 					my @listargs = ( $rdgtext );
 					push( @listargs, @{$readings{$rdgtext}} );
 					my $listrep = join( ', ', map { "'$_'" } @listargs );
 					push( @js_arguments, "[ $listrep ]" );
 				}
-				push( @js_arguments, ');' );
-				push( @words, sprintf( '<span class="lemma" onClick="%s">%s</span>',
-					join( ' ', @js_arguments ), $lemmatext ) );
+				push( @words, sprintf( '<span class="lemma" onClick="showApparatus( %s );">%s</span>',
+					join( ',', @js_arguments ), $lemmatext ) );
 			} else {
 				push( @words, $lemmatext ) if $lemmatext;
 			}
@@ -121,7 +128,8 @@ sub process_original {
 		## Process notes
 		if( $xpc->exists( 'tei:note', $app ) ) {
 			foreach my $note_el ( $xpc->findnodes( 'tei:note', $app ) ) {
-				my $spantag = 'span class="editnote" onclick="showNote(\'';
+				my $spantag = 'span class="editnote" onclick="showNote(';
+				$spantag .= "'$lemmatext', '";
 				my $notetext = $note_el->textContent();
 				$notetext =~ s!'!\\'!g;
 				$spantag .= $notetext . '\')"';

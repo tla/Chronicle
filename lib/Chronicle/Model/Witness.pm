@@ -63,7 +63,7 @@ sub _add_to_maps {
 	my $doc = $parser->parse_file( "$file" );
 	my $xpc = _xpc_for_el( $doc->documentElement );
 	my $sigil = $xpc->findvalue( '//tei:msDesc/attribute::xml:id' );
-	my $textname = sprintf( "%s, %s %s", 
+	my $textname = sprintf( "%s: %s, %s %s", $sigil,
 		$xpc->findvalue( '//tei:msIdentifier/tei:settlement' ),
 		$xpc->findvalue( '//tei:msIdentifier/tei:repository' ),
 		$xpc->findvalue( '//tei:msIdentifier/tei:idno' ) );
