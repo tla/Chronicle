@@ -12,8 +12,8 @@
 			<h2>Excerpts from the <span class="texttitle">Chronicle</span> of Matthew of Edessa</h2>
 		</div>
 		<div id="sidenav">
-			<h2><a href="abouttext">About the <span class="texttitle">Chronicle</span></a></h2>
-			<h2><a href="aboutsite">About this edition</a></h2>
+			<h2><a href="[% c.uri_for( '/abouttext' ) %]">About the <span class="texttitle">Chronicle</span></a></h2>
+			<h2><a href="[% c.uri_for( '/aboutsite' ) %]">About this edition</a></h2>
 			<h2>Text and translations</h2>
 			<ul>
 [% INCLUDE menu_text.tt2 -%]
