@@ -21,7 +21,7 @@ h3 {
 	height: 150px;
 	left: 0px;
 	top: 0px;
-	background: url('file:///Users/joris/Documents/TEMP/edessa/baldwin_edessa_banner.jpg');
+	background: url('/images/baldwin_edessa_banner.jpg');
 	z-index: -1;
 }
 #topbanner h1 {
