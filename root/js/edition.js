@@ -3,7 +3,7 @@ function showApparatus() {
 	var lemma = args.shift();
 	var content = '<span class="apparatuslemma">' + lemma + '</span><br/>';
 	jQuery.each( args, function( index, rdgset ) {
-		content = content + '<span class="appreading">' + rdgset.shift() + '</span>';
+		content = content + '<span class="appreading">' + rdgset.shift() + '</span>&nbsp;';
 		content = content + '<span class="appwitlist">' + rdgset.join(', ') + '</span><br/>';
 	});
 	$('#apparatusdisplay').empty();
