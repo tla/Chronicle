@@ -61,12 +61,13 @@ h3 {
 }
 #pagecontent {
 	position: relative;
-	top: -100px;
+	top: -30px;
 	width: 65%;
 	float: right;
 	padding-top: 20px;
+	margin-right: 20px;
 	border: 1px solid #222;
-	height: 90%;
+	height: 80%;
 	overflow: scroll;
 	background-color: #fafafa;
 }
@@ -81,6 +82,36 @@ h3 {
 	top: -0.4em;
 	color: #785378;
 	text-decoration: underline;
+}
+#apparatusdisplay {
+	position: fixed;
+	width: 400px;
+	bottom: 20px;
+	left: 450px;
+	border: 1px solid;
+	z-index: 1;
+	background-color: #f2f2f2;
+	padding: 3px 10px;
+}
+.apparatuslemma {
+	text-decoration: underline;
+	font-weight: bold;
+}
+.appreading {
+	font-style: italic;
+	margin-left: 5px;
+}
+.appwitlist {
+	margin-left: 10px;
+}
+#notedisplay {
+	position: fixed;
+	bottom: 20px;
+	left: 900px;
+	border: 1px solid;
+	z-index: 1;
+	background-color: #f2f2f2;
+	padding: 3px 10px;
 }
 .section {
 	float: left;
