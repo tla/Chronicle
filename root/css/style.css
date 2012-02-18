@@ -25,7 +25,7 @@ h3 {
 	z-index: -1;
 }
 #topbanner h1 {
-	font-size: 64px;
+	font-size: 48px;
 }
 #topbanner h2 {
 	font-size: 24px;
@@ -33,7 +33,7 @@ h3 {
 	margin-left: 5px;
 }
 #sidenav {
-	width: 30%;
+	width: 25%;
 	float: left;
 	height: 70%;
 	padding: 20px;
@@ -104,6 +104,14 @@ table.pagecolumn td.left {
 table.pagecolumn td.right {
 	vertical-align: top;
 	width: 350px;
+}
+.displaysigil {
+	font-style: italic;
+	font-size: 40px;
+}
+.displaywitid {
+	font-size: 30px;
+	padding-left: 80px;
 }
 #paralleltext td {
 	vertical-align: top;

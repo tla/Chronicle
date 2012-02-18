@@ -1,5 +1,6 @@
 <div id="pagecontent">
-	<h3>[% textidentifier %]</h3>
+	<span class="displaysigil">[% textsigil %]</span>
+	<span class="displaywitid">[% textidentifier %]</span>
 	[% textdescription %]
 </div>
 <div id="sourcetext">
