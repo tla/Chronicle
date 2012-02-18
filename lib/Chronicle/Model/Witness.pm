@@ -63,7 +63,7 @@ sub _add_to_maps {
 	my $doc = $parser->parse_file( "$file" );
 	my $xpc = _xpc_for_el( $doc->documentElement );
 	my $sigil = $xpc->findvalue( '//tei:msDesc/attribute::xml:id' );
-	my $textname = sprintf( "%s: %s, %s %s", $sigil,
+	my $textname = sprintf( "%s, %s %s", 
 		$xpc->findvalue( '//tei:msIdentifier/tei:settlement' ),
 		$xpc->findvalue( '//tei:msIdentifier/tei:repository' ),
 		$xpc->findvalue( '//tei:msIdentifier/tei:idno' ) );
@@ -74,8 +74,9 @@ sub _add_to_maps {
 sub as_html {
 	my( $self, $sigil ) = @_;
 	my $textroot = $self->textobj( $sigil );
-	# Name, that's easy
-	my $return_hash = { 'textidentifier' => $self->textname( $sigil ) };
+	# Sigil and name, that's easy
+	my $return_hash = { 'textsigil' => $sigil,
+		'textidentifier' => $self->textname( $sigil ) };
 	my $xpc = _xpc_for_el( $textroot );
 	# Description blurb also not too hard
 	$return_hash->{'textdescription'} = join( '',
@@ -106,7 +107,7 @@ sub _html_transform {
 	my %span_map = (
 		'add' => 'addition',
 		'del' => 'deletion',
-		'num' => 'number',
+		'abbr|num' => 'number',
 		'hi' => 'highlight',
 		'ex' => 'expansion',
 		'expan' => 'expansion',
@@ -129,7 +130,7 @@ sub _html_transform {
 
 		
 	## RECURSING ELEMENTS
-	} elsif( $element->nodeName =~ /^(body|seg|subst)$/ ) {
+	} elsif( $element->nodeName =~ /^(body|seg|subst|num)$/ ) {
 		# No wrapping, just pass-through
 		@return_words = map { _html_transform( $_, $usecolumns ) } $element->childNodes;
 		# but if it's a segword, put in a space.
@@ -152,6 +153,14 @@ sub _html_transform {
 		push( @return_words, '<p>' );
 		push( @return_words, map { _html_transform( $_, $usecolumns ) } $element->childNodes );
 		push( @return_words, '</p>' );
+		
+	} elsif( $element->nodeName eq 'abbr' 
+		&& $element->parentNode->nodeName eq 'num' ) {
+		# A special case
+		push( @return_words, "<span class=\"number\">" );
+		push( @return_words, map { _html_transform( $_, $usecolumns ) } $element->childNodes );
+		push( @return_words, '</span>' );
+		
 
 	## OTHER ELEMENTS
 	} elsif( $element->nodeName eq 'pb' ) {
