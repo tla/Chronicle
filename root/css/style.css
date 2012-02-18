@@ -1,39 +1,45 @@
 body { 
-    margin: 0; 
-    padding: 20px; 
-    font: 1em Palatino, Times, serif; 
-    font-size: 85%; 
-    color: #666;
+	margin: 0; 
+	padding: 0px; 
+	font: 1em Palatino, Times, serif; 
+	font-size: 85%; 
+	color: #666;
 }
 h1 {
-    color: #222222;
-    font-size: 24px;
-    font-weight: 100;
-    margin: 0 0 17px;
-    padding: 0;
+	color: #402B10;
+	font-size: 24px;
+	font-weight: 100;
+	margin-left: 5px;
+	margin-bottom: 17px;
+	margin-top: 0px;
+	padding: 0;
+}
+h3 {
+	margin-left: 15px;
 }
 #topbanner {
 	height: 150px;
 	left: 0px;
 	top: 0px;
-	background: url('/images/baldwin_edessa_banner.jpg');
+	background: url('file:///Users/joris/Documents/TEMP/edessa/baldwin_edessa_banner.jpg');
 	z-index: -1;
-	color: #111111;
-	text-align: right;
-	padding-right: 50px;
 }
 #topbanner h1 {
 	font-size: 64px;
 }
 #topbanner h2 {
 	font-size: 24px;
+	color: #402B10;
+	margin-left: 5px;
 }
 #sidenav {
-	width: 320px;
+	width: 30%;
 	float: left;
+	height: 70%;
 	padding: 20px;
 	color: #ffffff;
 	background-color: #785378;
+	overflow: auto;
 }
 #sidenav a:link {
 	color: #ffffff;
@@ -54,9 +60,15 @@ h1 {
 	margin-bottom: 8px;
 }
 #pagecontent {
-	padding-top: 30px;
-	margin-left: 420px;
-	padding-right: 50px;
+	position: relative;
+	top: -100px;
+	width: 65%;
+	float: right;
+	padding-top: 20px;
+	border: 1px solid #222;
+	height: 90%;
+	overflow: scroll;
+	background-color: #fafafa;
 }
 .lemma {
 	color: #785378;
