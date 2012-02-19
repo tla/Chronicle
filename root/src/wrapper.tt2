@@ -24,7 +24,6 @@
         	</ul>
 		</div>
 [% content %]
-		<div id="apparatusdisplay"></div>
 		<div id="notedisplay"></div>
 		<div id="footer">
 		</div>

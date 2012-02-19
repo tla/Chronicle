@@ -1,11 +1,14 @@
-<div id="pagecontent">
-<h3>[% textname %]</h3>
-<table id="paralleltext">
-[% FOREACH pg IN paragraphs -%]
-  <tr>
-  	<td class="langorig"><p>[% pg.original %]</p></td>
-  	<td class="langtrans"><p>[% pg.translation %]</p></td>
-  </tr>
-[% END -%]
-</table>
+<div id="pagecontent_container">
+    <div id="pagecontent">
+        <h3>[% textname %]</h3>
+        <table id="paralleltext">
+        [% FOREACH pg IN paragraphs -%]
+            <tr>
+                <td class="langorig"><p>[% pg.original %]</p></td>
+                <td class="langtrans"><p>[% pg.translation %]</p></td>
+            </tr>
+        [% END -%]
+        </table>
+    </div>
+    <div id="apparatusdisplay"></div>
 </div>

@@ -59,16 +59,20 @@ h3 {
 #sidenav li {
 	margin-bottom: 8px;
 }
-#pagecontent {
+#pagecontent_container {
 	position: relative;
-	top: -30px;
-	width: 65%;
+	top: -5%;
+	width: 68%;
 	float: right;
-	padding-top: 20px;
 	margin-right: 20px;
 	border: 1px solid #222;
-	height: 80%;
-	overflow: scroll;
+	height: 78%;
+	background-color: #fafafa;
+}
+#pagecontent {
+	padding-top: 2%;
+	height: 97%;
+	overflow: auto;
 	background-color: #fafafa;
 }
 .lemma {
@@ -84,10 +88,10 @@ h3 {
 	text-decoration: underline;
 }
 #apparatusdisplay {
-	position: fixed;
-	width: 400px;
-	bottom: 20px;
-	left: 450px;
+	position: relative;
+	width: 80%;
+	bottom: 80px;
+	left: 10%;
 	border: 1px solid;
 	z-index: 1;
 	background-color: #f2f2f2;
