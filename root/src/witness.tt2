@@ -1,8 +1,10 @@
-<div id="pagecontent">
-	<span class="displaysigil">[% textsigil %]</span>
-	<span class="displaywitid">[% textidentifier %]</span>
-	[% textdescription %]
-</div>
-<div id="sourcetext">
-	[% textcontent %]
+<div id="witness_container">
+	<div id="witdescription">
+		<span class="displaysigil">[% textsigil %]</span>
+		<span class="displaywitid">[% textidentifier %]</span>
+		[% textdescription %]
+	</div>
+	<div id="sourcetext">
+		[% textcontent %]
+	</div>
 </div>

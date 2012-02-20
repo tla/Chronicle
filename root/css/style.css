@@ -38,7 +38,7 @@ h3 {
 	height: 70%;
 	padding: 20px;
 	color: #ffffff;
-	background-color: #785378;
+	background-color: #541414;
 	overflow: auto;
 }
 #sidenav a:link {
@@ -80,22 +80,23 @@ h3 {
 	text-decoration: underline;
 }
 .editnote {
-	vertical-align: baseline;
-	font-size: 0.8em;
-	position: relative;
-	top: -0.4em;
 	color: #785378;
-	text-decoration: underline;
+	text-decoration: none;
+	border-bottom: 1px dotted #785378;
 }
 #apparatusdisplay {
 	position: relative;
-	width: 80%;
-	bottom: 80px;
-	left: 10%;
+	float: left;
+	width: 45%;
+	bottom: 15px;
+	margin-left: 5px;
 	border: 1px solid;
 	z-index: 1;
 	background-color: #f2f2f2;
 	padding: 3px 10px;
+}
+.selectedlemma {
+	background-color: #ffffa0;
 }
 .apparatuslemma {
 	text-decoration: underline;
@@ -109,9 +110,12 @@ h3 {
 	margin-left: 10px;
 }
 #notedisplay {
-	position: fixed;
-	bottom: 20px;
-	left: 900px;
+	position: relative;
+	float: left;
+	bottom: 15px;
+	margin-left: 15px;
+	margin-right: 5px;
+	width: 45%;
 	border: 1px solid;
 	z-index: 1;
 	background-color: #f2f2f2;
@@ -128,8 +132,23 @@ p {
 p.followpg {
 	text-indent: 0px;
 }
+#witness_container {
+	position: relative;
+	top: -5%;
+	width: 68%;
+	float: right;
+	margin-right: 20px;
+	border: 1px solid #222;
+	height: 85%;
+	background-color: #fafafa;
+	overflow: scroll;
+}
+#witdescription {
+	margin-top: 40px;
+	margin-left: 40px;
+}
 #sourcetext {
-	margin-left: 450px;
+	margin-left: 150px;
 	margin-top: 40px;
 }
 table.pagecolumn td.left {

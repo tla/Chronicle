@@ -60,7 +60,6 @@ sub paragraphs {
 	my @paragraphs;
 	foreach my $pgel ( $xpc->findnodes( './/tei:p[@xml:id]' ) ) {
 		my $pgid = $pgel->getAttribute( 'xml:id' );
-		$DB::single = 1;
 		my( $pgcorr ) = $xpc->findnodes( ".//tei:p[\@corresp = \"#$pgid\"]" );
 		my $pgdata = {
 			'original' => $self->process_original( $pgel ),
@@ -74,74 +73,141 @@ sub paragraphs {
 sub process_original {
 	my( $self, $pgel ) = @_;
 	my $xpc = _xpc_for_el( $pgel );
-	my $note_ctr = 1;
 	my @words;
 	foreach my $app ( $xpc->findnodes( 'descendant::tei:app' ) ) {
-		my $lemmatext;
-		if( $xpc->exists( 'tei:lem', $app ) ) {
-			my @lemma;
-			# Process the lemma and any apparatus
-			foreach my $w ( $xpc->findnodes( 'tei:lem/tei:w', $app ) ) {
-				push( @lemma, $w->textContent );
-			}
-			$lemmatext = join( ' ', @lemma );
-			# Does the lemma have sibling rdgs? If so, we need to make an apparatus.
-			if( $lemmatext && $xpc->exists( 'tei:rdg', $app ) ) {
-				my %readings;
-				# Collect the readings
-				foreach my $rdg ( $xpc->findnodes( 'tei:rdg', $app ) ) {
-					my @rdgtext;
-					foreach my $lac ( $xpc->findnodes( 
-						'tei:lacunaStart|tei:lacunaEnd', $rdg ) ) {
-						# Make a "reading" that is the lacuna.
-						push( @rdgtext, $lac->nodeName eq 'lacunaStart'
-							? '(lacuna begins)' : '(lacuna ends)' );
-					}
-					foreach my $w ( $xpc->findnodes( 'tei:w', $rdg ) ) {
-						push( @rdgtext, $w->textContent );
-					}
-					push( @rdgtext, '(omitted)' ) unless @rdgtext;
-					my @wits = _parse_wit_string( $rdg->getAttribute('wit') );
-					$readings{join(' ', @rdgtext )} = \@wits;
+		my @process_apps;
+		my @app_words;
+		## Cope with apparatus criticus and notes. Need to anchor on
+		## an apparatus that has a lemma.
+		if( $xpc->exists( 'tei:lem/tei:w', $app ) ) {
+			push( @process_apps, $app );
+			my $curr = $app;
+			while( $curr ) {
+				my $next = $xpc->find( 'following-sibling::tei:app[1]', $curr )->pop;
+				if( ref($next) ne 'XML::LibXML::Element' 
+					|| $xpc->exists( 'tei:lem/tei:w', $next ) ) {
+					last;
+				} else {
+					push( @process_apps, $next );
+					$curr = $next;
 				}
-				## TODO Look ahead for empty lemmata
-				# Arrange the readings into our JS arguments
-				# Function will be:
-				# showApparatus( lemmatext, [ reading, wit, wit ], [ reading, wit, wit ], ... )
-				my @js_arguments = ( "'$lemmatext'" );
-				foreach my $rdgtext ( keys %readings ) {
-					my @listargs = ( $rdgtext );
-					push( @listargs, @{$readings{$rdgtext}} );
-					my $listrep = join( ', ', map { "'$_'" } @listargs );
-					push( @js_arguments, "[ $listrep ]" );
-				}
-				push( @words, sprintf( '<span class="lemma" onClick="showApparatus( %s );">%s</span>',
-					join( ',', @js_arguments ), $lemmatext ) );
-			} else {
-				push( @words, $lemmatext ) if $lemmatext;
 			}
-		} else {
-			# This must be a witStart or witEnd - add some sigil plus apparatus.
-			# TODO add onClick to show the content
-			push( @words, "<span class=\"witborder\">\x{2020}</span>" );
-		}
-		## Process notes
-		if( $xpc->exists( 'tei:note', $app ) ) {
-			foreach my $note_el ( $xpc->findnodes( 'tei:note', $app ) ) {
-				my $spantag = 'span class="editnote" onclick="showNote(';
-				$spantag .= "'$lemmatext', '";
-				my $notetext = $note_el->textContent();
-				$notetext =~ s!'!\\'!g;
-				$spantag .= $notetext . '\')"';
-				push( @words, "<$spantag>$note_ctr</span>");
-				$note_ctr++;
+			push( @app_words, compose_app_html( $xpc, @process_apps ) );
+		} 
+		
+		## Cope with apparatus siglorum
+		foreach my $signpost ( $xpc->findnodes( 'tei:rdg/tei:witStart | tei:rdg/tei:witEnd | tei:rdg/tei:lacunaStart | tei:rdg/tei:lacunaEnd', $app ) ) {
+			# Spit out a witness start/end marker. Start markers before the words,
+			# end markers after the words.
+			# Get the witnesses of the enclosing rdg element
+			my @wits = _parse_wit_string( $signpost->parentNode->getAttribute('wit') );
+			my $note;
+			my $prepend;
+			if( $signpost->nodeName eq 'witStart' ) {
+				$note = "Beginning of text for witness(es)";
+				$prepend = 1;
+			} elsif( $signpost->nodeName eq 'witEnd' ) {
+				$note = "End of text for witness(es)";
+			} elsif( $signpost->nodeName eq 'lacunaStart' ) {
+				$note = "Lacuna begins for witness(es)";
+				$prepend = 1;
+			} elsif( $signpost->nodeName eq 'lacunaEnd' ) {
+				$note = "Lacuna ends for witness(es)";
 			}
+			$note = join( ' ', $note, @wits );
+			my $marker = "<span class=\"appsiglorum\" onclick=\"showNote('', '$note')\">\x{2020}</span>";
+			$prepend ? unshift( @app_words, $marker ) : push( @app_words, $marker );
 		}
+		push( @words, @app_words );
 	}
 	return join( ' ', @words );
 }
 
+sub compose_app_html {
+	my( $xpc, @apps ) = @_;
+	my @words;
+
+	# Get the aggregate lemma and make the list of unique readings for 
+	# the included apps.
+	my @lemma;
+	my %wit_rdgs;
+	my @appnotes;
+	foreach my $app ( @apps ) {
+		foreach my $w ( $xpc->findnodes( 'tei:lem/tei:w', $app ) ) {
+			push( @lemma, $w->textContent );
+		}
+
+		# Collect the readings and notes
+		foreach my $rdg ( $xpc->findnodes( 'tei:lem | tei:rdg', $app ) ) {
+			my @rdgtext;
+			foreach my $w ( $xpc->findnodes( 'tei:w', $rdg ) ) {
+				push( @rdgtext, $w->textContent );
+			}
+			foreach my $wit ( _parse_wit_string( $rdg->getAttribute('wit') ) ) {
+				push( @{$wit_rdgs{$wit}}, @rdgtext );
+			}
+		}
+		foreach my $note_el( $xpc->findnodes( 'tei:note', $app ) ) {
+			my $notetext = $note_el->textContent();
+			$notetext =~ s!'!\\'!g;
+			push( @appnotes, $notetext );
+		}
+	}
+
+	my $lemmatext = join( ' ', @lemma );
+	my %readings;
+	foreach my $wit ( keys %wit_rdgs ) {
+		my $rdgtext = join( ' ', @{$wit_rdgs{$wit}} );
+		# Don't list the lemma witnesses
+		next if $rdgtext eq $lemmatext;
+		# Strip punctuation
+		$rdgtext =~ s/[[:punct:]]//g;
+		# Fill in something for omissions
+		$rdgtext = '(omitted)' unless $rdgtext;
+		push( @{$readings{$rdgtext}}, $wit );
+	}
+	
+	# Collect the notes
+	my %notes;
+	
+	
+	# Arrange the readings into our JS arguments
+	# Function will be:
+	# showApparatus( lemmatext, [ reading, wit, wit ], [ reading, wit, wit ], ... )
+	# showNote( note1, note2, ... )
+	my @spanclass;
+	my @jsfuncts;
+	if( keys %readings ) {
+		my @js_arguments = ( "'$lemmatext'" );
+		foreach my $rdgtext ( keys %readings ) {
+			my @listargs = ( $rdgtext );
+			push( @listargs, @{$readings{$rdgtext}} );
+			my $listrep = join( ', ', map { "'$_'" } @listargs );
+			push( @js_arguments, "[ $listrep ]" );
+		}
+		push( @spanclass, 'lemma' );
+		push( @jsfuncts, sprintf( 'showApparatus( %s )', join( ',', @js_arguments ) ) );
+		push( @jsfuncts, '$(this).addClass(\'selectedlemma\')' );
+	}
+	if( @appnotes ) {
+		my @js_arguments = map { "'$_'" } @appnotes;
+		push( @spanclass, 'editnote' );
+		push( @jsfuncts, sprintf( 'showNote( %s )', join( ',', @js_arguments ) ) );
+	}
+	if( @jsfuncts ) {
+		my $spanclasstag = sprintf( 'class="%s"', join( ' ', @spanclass ) );
+		my $spanjstag = sprintf( 'onclick="%s"', join( ';', @jsfuncts ) );
+		push( @words, "<span $spanclasstag $spanjstag>$lemmatext</span>" );
+	} else {
+		push( @words, $lemmatext ) if $lemmatext;
+	}
+		
+	return @words;
+}
+
 sub _parse_wit_string {
+	my( $witstr ) = @_;
+	return () unless $witstr;
 	my @wits = split( /\s+/, $_[0] );
 	map { s/^\#// } @wits;
 	return @wits;

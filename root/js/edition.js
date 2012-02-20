@@ -6,29 +6,28 @@ function showApparatus() {
 		content = content + '<span class="appreading">' + rdgset.shift() + '</span>&nbsp;';
 		content = content + '<span class="appwitlist">' + rdgset.join(', ') + '</span><br/>';
 	});
-	$('#apparatusdisplay').empty();
+	hideApparatus();
 	$('#apparatusdisplay').append( content );
+	$('#apparatusdisplay').click( function() { hideApparatus() });
 	$('#apparatusdisplay').show();
 };
 
-function showNote( lemma, notetext ) {
-	var content = '<span class="notelemma">' + lemma + '</span> ] ';
-	content = content + '<span class="notetext">' + notetext + '</span><br/>';
+function showNote( notetext ) {
+	content = '<span class="notetext">' + notetext + '</span><br/>';
 	$('#notedisplay').empty();
 	$('#notedisplay').append( content );
+	$('#notedisplay').click( function() { hideApparatus() });
 	$('#notedisplay').show();
 };
 
 function hideApparatus() {
 	$('#apparatusdisplay').empty();
 	$('#apparatusdisplay').hide();	
-};
-function hideNote() {
 	$('#notedisplay').empty();
 	$('#notedisplay').hide();	
+	$('.lemma').removeClass('selectedlemma');
 };
 
 $(document).ready( function() {
 	hideApparatus();
-	hideNote();
 });

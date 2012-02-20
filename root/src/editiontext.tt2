@@ -11,4 +11,5 @@
         </table>
     </div>
     <div id="apparatusdisplay"></div>
+    <div id="notedisplay"></div>
 </div>
