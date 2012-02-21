@@ -21,7 +21,7 @@ h3 {
 	height: 150px;
 	left: 0px;
 	top: 0px;
-	background: url('/images/baldwin_edessa_banner.jpg');
+	background: url('../images/baldwin_edessa_banner.jpg');
 	z-index: -1;
 }
 #topbanner h1 {
@@ -83,6 +83,14 @@ h3 {
 	color: #785378;
 	text-decoration: none;
 	border-bottom: 1px dotted #785378;
+}
+.appsiglorum {
+	vertical-align: baseline;
+	font-size: 0.8em;
+	position: relative;
+	top: -0.4em;
+	color: #785378;
+	text-decoration: underline;
 }
 #apparatusdisplay {
 	position: relative;
