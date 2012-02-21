@@ -49,7 +49,7 @@ sub BUILD {
 sub get_witlist {
 	my $self = shift;
 	my $ret = [];
-	foreach my $pair ( sort { $a->[1] cmp $b->[1] } $self->witpairs ) {
+	foreach my $pair ( sort { $a->[0] cmp $b->[0] } $self->witpairs ) {
 		push( @$ret, { 'sigil' => $pair->[0], 'name' => $pair->[1] } );
 	}
 	return $ret;
