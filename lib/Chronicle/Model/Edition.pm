@@ -115,7 +115,7 @@ sub process_original {
 				$note = "Lacuna ends for witness(es)";
 			}
 			$note = join( ' ', $note, @wits );
-			my $marker = "<span class=\"appsiglorum\" onclick=\"showNote('', '$note')\">\x{2020}</span>";
+			my $marker = "<span class=\"appsiglorum\" onclick=\"showNote('$note')\">\x{2020}</span>";
 			$prepend ? unshift( @app_words, $marker ) : push( @app_words, $marker );
 		}
 		push( @words, @app_words );
@@ -127,8 +127,8 @@ sub compose_app_html {
 	my( $xpc, @apps ) = @_;
 	my @words;
 
-	# Get the aggregate lemma and make the list of unique readings for 
-	# the included apps.
+	# Get the aggregate lemma and make the list of unique readings and
+	# editorial notes for the included apps.
 	my @lemma;
 	my %wit_rdgs;
 	my @appnotes;
@@ -167,11 +167,7 @@ sub compose_app_html {
 		push( @{$readings{$rdgtext}}, $wit );
 	}
 	
-	# Collect the notes
-	my %notes;
-	
-	
-	# Arrange the readings into our JS arguments
+	# Arrange the readings and notes into our JS arguments
 	# Function will be:
 	# showApparatus( lemmatext, [ reading, wit, wit ], [ reading, wit, wit ], ... )
 	# showNote( note1, note2, ... )
