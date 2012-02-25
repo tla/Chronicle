@@ -193,6 +193,18 @@ h3 {
 	text-align: right;
 	margin-right: 20px;
 }
+#downloadlinks a:link {
+	color: #785378;
+}
+#downloadlinks a:visited {
+	color: #785378;
+}
+#downloadlinks a:hover {
+	color: #d1bad1;
+}
+#downloadlinks a:active {
+	color: #d1bad1;
+}
 .section {
 	float: left;
 	position: relative; left: -30px;
