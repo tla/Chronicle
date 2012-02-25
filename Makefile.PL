@@ -15,8 +15,10 @@ requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Plugin::Unicode::Encoding';
 requires 'Catalyst::Action::RenderView';
 requires 'Catalyst::View::TT';
+requires 'Catalyst::View::JSON';
 requires 'Moose';
 requires 'MooseX::Types::Path::Class';
+requires 'TryCatch';
 requires 'namespace::autoclean';
 requires 'Config::General'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats

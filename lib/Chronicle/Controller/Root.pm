@@ -1,6 +1,7 @@
 package Chronicle::Controller::Root;
 use Moose;
 use namespace::autoclean;
+use TryCatch;
 
 BEGIN { extends 'Catalyst::Controller' }
 
@@ -81,8 +82,15 @@ sub wit_return :PathPart('') :Chained('witness') :Args(1) {
 	# TODO error unless format is a recognized one
 	my $m = $c->model('Witness');
 	my $sub = "as_$format";
-	$c->stash->{'result'} = $m->$sub( $c->stash->{'witness'} );
-	$c->forward( 'View::'.uc($format) );
+	try {
+		$c->stash->{'result'} = $m->$sub( $c->stash->{'witness'} );
+		$c->forward( 'View::'.uc($format) );
+	} catch ( Text::TEI::Collate::Error $e ) {
+		$c->response->status(500);
+		$c->stash->{'error'} = $e->ident . ' // ' . $e->message;
+		$c->stash->{'template'} = 'error.tt2';
+		$c->forward('View::TT');
+	}
 }
 
 =head2 abouttext

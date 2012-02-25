@@ -80,6 +80,13 @@ h3 {
 	font-size: 85%;
 	font-style: italic;
 }
+#error {
+	border: 1px solid red;
+	font-weight: bold;
+	float: left;
+	margin: 40px;
+	padding: 10px;
+}
 /* Layout for information pages */
 #infocontent_container {
 	height: 85%;
@@ -176,10 +183,15 @@ h3 {
 #witdescription {
 	margin-top: 40px;
 	margin-left: 40px;
+	margin-right: 20px;
 }
 #sourcetext {
 	margin-left: 150px;
 	margin-top: 40px;
+}
+#downloadlinks {
+	text-align: right;
+	margin-right: 20px;
 }
 .section {
 	float: left;

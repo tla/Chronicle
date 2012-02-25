@@ -1,7 +1,11 @@
 <div id="witness_container" class="container">
 	<div id="witdescription">
 		<span class="displaysigil">[% textsigil %]</span>
-		<span class="displaywitid">[% textidentifier %]</span>
+		<span class="displaywitid">[% textidentifier %]</span><br/>
+		<div id="downloadlinks">
+			<p><a href="[% c.uri_for( 'witness', textsigil, 'tei' ) %]">TEI version</a>  |  
+			<a href="[% c.uri_for( 'witness', textsigil, 'json' ) %]">JSON version</a></p>
+		</div>
 		[% textdescription %]
 	</div>
 	<div id="sourcetext">

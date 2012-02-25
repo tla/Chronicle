@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 
 use Catalyst::ScriptRunner;
+eval { no warnings; binmode $DB::OUT, 'utf8'; }; 
 Catalyst::ScriptRunner->run('Chronicle', 'Test');
 
 1;
