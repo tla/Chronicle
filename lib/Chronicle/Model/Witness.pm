@@ -99,7 +99,7 @@ sub as_json {
 
 sub as_tei {
 	my( $self, $sigil ) = @_;
-	return $self->textobj( $sigil )->toString(1);
+	return $self->textobj( $sigil );
 }
 
 sub _html_transform {

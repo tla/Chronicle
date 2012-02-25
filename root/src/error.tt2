@@ -1,0 +1,4 @@
+<div id="error">
+	<p>Error: [% error %]</p>
+	<p>Please <a href="mailto:tla@mit.edu">report</a> that you got this.</p>
+</div>
