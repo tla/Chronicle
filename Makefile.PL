@@ -22,7 +22,7 @@ requires 'TryCatch';
 requires 'namespace::autoclean';
 requires 'Config::General'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats
-requires 'File::BaseName';
+requires 'File::Basename';
 requires 'Path::Class::Dir';
 requires 'Path::Class::File';
 requires 'Text::TEI::Collate';
