@@ -18,6 +18,18 @@ h1 {
 h3 {
 	margin-left: 15px;
 }
+a:link {
+	color: #785378;
+}
+a:visited {
+	color: #785378;
+}
+a:hover {
+	color: #d1bad1;
+}
+a:active {
+	color: #d1bad1;
+}
 
 /* Global page layout */
 #topbanner {
@@ -192,18 +204,6 @@ h3 {
 #downloadlinks {
 	text-align: right;
 	margin-right: 20px;
-}
-#downloadlinks a:link {
-	color: #785378;
-}
-#downloadlinks a:visited {
-	color: #785378;
-}
-#downloadlinks a:hover {
-	color: #d1bad1;
-}
-#downloadlinks a:active {
-	color: #d1bad1;
 }
 .section {
 	float: left;
