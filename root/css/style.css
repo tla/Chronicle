@@ -112,10 +112,12 @@ h3 {
 .lemma {
 	color: #785378;
 	text-decoration: underline;
+	cursor: pointer;
 }
 .editnote {
 	color: #785378;
 	border-bottom: 1px dotted #785378;
+	cursor: pointer;
 }
 .appsiglorum {
 	vertical-align: baseline;
@@ -124,6 +126,7 @@ h3 {
 	top: -0.4em;
 	color: #785378;
 	text-decoration: underline;
+	cursor: pointer;
 }
 #apparatusdisplay {
 	position: relative;
