@@ -1,3 +1,4 @@
+/* General body/font appearance */
 body { 
 	margin: 0; 
 	padding: 0px; 
@@ -17,6 +18,8 @@ h1 {
 h3 {
 	margin-left: 15px;
 }
+
+/* Global page layout */
 #topbanner {
 	height: 150px;
 	left: 0px;
@@ -59,13 +62,33 @@ h3 {
 #sidenav li {
 	margin-bottom: 8px;
 }
-#pagecontent_container {
+.container {
 	position: relative;
 	top: -5%;
 	width: 68%;
 	float: right;
 	margin-right: 20px;
 	border: 1px solid #222;
+}
+#footer {
+	clear: left;
+	margin-left: 10px;
+	padding-top: 15px;
+	width: 200px;
+}
+/* Layout for information pages */
+#infocontent_container {
+	height: 85%;
+	background-color: #fafafa;
+	overflow: scroll;
+}
+#infocontent {
+	margin-left: 40px;
+}
+
+/* Layout for edition pages */
+
+#pagecontent_container {
 	height: 78%;
 	background-color: #fafafa;
 }
@@ -75,13 +98,16 @@ h3 {
 	overflow: auto;
 	background-color: #fafafa;
 }
+#paralleltext td {
+	vertical-align: top;
+	padding: 20px;
+}
 .lemma {
 	color: #785378;
 	text-decoration: underline;
 }
 .editnote {
 	color: #785378;
-	text-decoration: none;
 	border-bottom: 1px dotted #785378;
 }
 .appsiglorum {
@@ -129,24 +155,10 @@ h3 {
 	background-color: #f2f2f2;
 	padding: 3px 10px;
 }
-.section {
-	float: left;
-	position: relative; left: -30px;
-}
-p {
-	line-height: 150%;
-	text-indent: 15px;
-}
-p.followpg {
-	text-indent: 0px;
-}
+
+/* Layout for witness display pages */
+
 #witness_container {
-	position: relative;
-	top: -5%;
-	width: 68%;
-	float: right;
-	margin-right: 20px;
-	border: 1px solid #222;
 	height: 85%;
 	background-color: #fafafa;
 	overflow: scroll;
@@ -158,6 +170,17 @@ p.followpg {
 #sourcetext {
 	margin-left: 150px;
 	margin-top: 40px;
+}
+.section {
+	float: left;
+	position: relative; left: -30px;
+}
+p {
+	line-height: 150%;
+	text-indent: 15px;
+}
+p.followpg {
+	text-indent: 0px;
 }
 table.pagecolumn td.left {
 	vertical-align: bottom;
@@ -174,10 +197,6 @@ table.pagecolumn td.right {
 .displaywitid {
 	font-size: 30px;
 	padding-left: 80px;
-}
-#paralleltext td {
-	vertical-align: top;
-	padding: 20px;
 }
 .texttitle {
 	font-style: italic;

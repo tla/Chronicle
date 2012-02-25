@@ -1,4 +1,4 @@
-<div id="pagecontent_container">
+<div id="pagecontent_container" class="container">
     <div id="pagecontent">
         <h3>[% textname %]</h3>
         <table id="paralleltext">

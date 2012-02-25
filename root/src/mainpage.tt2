@@ -1,3 +1,10 @@
-<div id="pagecontent">
-		  <p>At some point there will be content on this bit of the page.
+<div id="infocontent_container" class="container">
+  <div id="infocontent">
+  	<h2>Introduction</h2>
+    <p>The <span class="texttitle">Chronicle</span> of Matthew of Edessa is one of the most important historical sources for the First Crusade and the establishment of the Crusader principalities in the Near East; it is also an important source for the hundred years before the Crusade, a time of massive upheaval for the Armenian people, set against the turbulent history of Byzantine loss of control of Asia Minor.
+    </p>
+    <p>The only biographical information that survives about Matthew is contained in the preambles to his second and third books. He was an Edessene monk who had taken it upon himself to relate, as accurately as he was able, the events of his times. He was not a vardapet, or scholarly cleric. He explains in the prologue to book 3 that, while these vardapets were capable of feats of scholarship that would be beyond him, he had concluded that no one but himself was capable of compiling this chronicle. His date of death is unknown; given his stated intention to relate 180 years of history, and the fact that his final chronicle entry fell two years short of that goal, it is generally assumed that he died not long after writing it. His date of birth is also unknown.
+	</p>
+	<p>These excerpts form part of a long-term project, begun in 2007 at the University of Oxford, to provide a full critical edition of the <span class="texttitle">Chronicle</span>.  There are two current editions of the text; the first was published in 1869 in Jerusalem, based upon two manuscripts (and a third for the continuation of the text after 1129 by Grigor Erecʿ). Those manuscripts are not yet available for fresh examination, although the Jerusalem edition was itself used here. The second, and current, edition was published in 1898 in Vałaršapat, drawing upon six manuscripts now held by the Matenadaran. Three of those have been incorporated into this edition, and the others will be available in the near future.</p>
+  </div>
 </div>
