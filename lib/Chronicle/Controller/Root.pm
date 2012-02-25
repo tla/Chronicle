@@ -79,18 +79,25 @@ Return the source text for the given witness in the given format.
 
 sub wit_return :PathPart('') :Chained('witness') :Args(1) {
 	my( $self, $c, $format ) = @_;
-	# TODO error unless format is a recognized one
 	my $m = $c->model('Witness');
-	my $sub = "as_$format";
+	my $sub = "as_" . lc($format);
+	my $view = 'View::'.uc($format);
 	try {
 		$c->stash->{'result'} = $m->$sub( $c->stash->{'witness'} );
-		$c->forward( 'View::'.uc($format) );
 	} catch ( Text::TEI::Collate::Error $e ) {
+		# Something went wrong with the conversion
 		$c->response->status(500);
 		$c->stash->{'error'} = $e->ident . ' // ' . $e->message;
 		$c->stash->{'template'} = 'error.tt2';
-		$c->forward('View::TT');
+		$view = 'View::TT';
+	} catch {
+		# Something went wrong, maybe bad format specification
+		$c->response->status(500);
+		$c->stash->{'error'} = "Could not render witness in format $format";
+		$c->stash->{'template'} = 'error.tt2';
+		$view = 'View::TT';
 	}
+	$c->forward( $view );
 }
 
 =head2 abouttext
