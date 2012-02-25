@@ -76,6 +76,10 @@ h3 {
 	padding-top: 15px;
 	width: 200px;
 }
+.copyright {
+	font-size: 85%;
+	font-style: italic;
+}
 /* Layout for information pages */
 #infocontent_container {
 	height: 85%;
@@ -84,6 +88,9 @@ h3 {
 }
 #infocontent {
 	margin-left: 40px;
+}
+#stemmacontainer {
+	text-align: center;
 }
 
 /* Layout for edition pages */
