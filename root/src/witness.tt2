@@ -1,4 +1,4 @@
-<div id="witness_container">
+<div id="witness_container" class="container">
 	<div id="witdescription">
 		<span class="displaysigil">[% textsigil %]</span>
 		<span class="displaywitid">[% textidentifier %]</span>

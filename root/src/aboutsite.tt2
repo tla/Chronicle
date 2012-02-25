@@ -1,4 +1,21 @@
-<div id="pagecontent">
+<div id="infocontent_container" class="container">
+  <div id="infocontent">
 	<h2>About this site</h2>
-	<p>The purpose of this site is to explore the possibilities of an online critical edition of a relatively widely-copied medieval text.  The site itself is written in the Perl Catalyst framework, and the data is taken from a set of source files in TEI XML.  The source code for the site may be found <a href="https://github.com/tla/Chronicle/">on Github</a>.
+	<p>The edition of these excerpts of the <span class="texttitle">Chronicle</span> of Matthew of Edessa arose from a D.Phil. thesis submitted in 2009 at the University of Oxford.  The thesis itself is available <a href="http://ora.ouls.ox.ac.uk/objects/uuid:67ea947c-e3fc-4363-a289-c345e61eb2eb">from the Oxford Research Archive</a>.  The primary focus of the thesis, and the purpose of editing these excerpts, was to explore the literary and historical framework within which Matthew wrote his <span class="texttitle">Chronicle</span>, and to re-examine some of his historical information in light of his literary aims.
 	</p>
+	<p>The purpose of this site is to explore the possibilities of an online critical edition of a relatively widely-copied medieval text.  The site itself is run using the Perl Catalyst framework, and the data is taken from a set of source files in TEI XML.  The source code for the site may be found <a href="https://github.com/tla/Chronicle/">on Github</a>; the TEI source for each witness may be downloaded from its main page.
+	</p>
+	<p>The 'Text and Translations' section gives the edited text and a parallel translation for each of the excerpts.  At the moment this is a relatively traditional presentation of the text; hyperlinked readings have variant readings, and/or editorial notes, available for display. Click on the reading to show its annotations; click on the annotation boxes to dismiss them.
+	</p>
+	<p>In addition to the edited text, each of the source witnesses may be viewed in the form of a diplomatic transcription.  The following markup tags have been used within the transcriptions:</p>
+	<ul>
+	  <li>Number abbreviations - represented by a line above the number.</li>
+	  <li>Scribal additions - represented in green.</li>
+	  <li>Scribal deletions - represented with strikethrough lines.</li>
+	  <li>Highlighted text - represented (as in the original witnesses) as larger red text.</li>
+	  <li>Abbreviated words - those letters that do not actually appear on the page are represented in italics.</li>
+	</ul>
+	<p>At present, image copyright restrictions prevent my linking to digital photographs of the manuscript pages; the fees for use are higher than can reasonably be paid for use in an open access publication, and give only time-limited rights in any event.
+	</p>
+  </div>
+</div>
