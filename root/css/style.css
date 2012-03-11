@@ -220,6 +220,7 @@ a:active {
 	display: none;
 	height: 600px;
 	width: 900px;
+	overflow: hidden;
 	z-index: 2;
 	background: white;
 }

@@ -3,6 +3,7 @@
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 		<link rel="stylesheet" type="text/css" href="[% c.uri_for( 'css', 'style.css' ) %]">
 		<script type="text/javascript" src="[% c.uri_for('/js/jquery-1.7.1.min.js') %]"></script>
+		<script type="text/javascript" src="[% c.uri_for('/js/jquery.xmlns.js') %]"></script>
 		<script type="text/javascript" src="[% c.uri_for('/js/edition.js') %]"></script>
 		<title>[% pagetitle %]</title>
 	</head>

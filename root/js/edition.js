@@ -10,8 +10,8 @@ function showApparatus() {
 	hideApparatus();
 	$('#apparatusdisplay').append( content );
 	$('#graphlink').click( function() {
-		centerPopup('#variantgraph_popup', svgid );
-		showPopup('#variantgraph_popup');
+		centerPopup('#variantgraph_popup');
+		showPopup('#variantgraph_popup', svgid );
 	});
 	$('#apparatusbox').show();
 };
@@ -32,12 +32,28 @@ function hideApparatus() {
 };
 
 var popped = null;
-function showPopup( elname ) {
+function showPopup( elname, scrollto_id ) {
 	if( popped != elname ) {
 		$('#backgroundPopup').css({ "opacity": "0.7" });
 		$('#backgroundPopup').fadeIn("slow");
 		$(elname).fadeIn("slow");
 		popped = elname;
+	}
+	if( elname == '#variantgraph_popup' ) {
+		scrollGraph( scrollto_id );
+	}
+};
+
+function scrollGraph( scrollto_id ) {
+	// scroll to given ID if asked
+	if( scrollto_id != null ) {
+		var nodePosition = $(scrollto_id).offset().left + parseFloat( $(scrollto_id + " ellipse").attr('rx') );
+		// ...but we really want it centered
+		var graphOffset = document.documentElement.clientWidth / 2;
+		var leftPoint = nodePosition - graphOffset;
+		$('#svgbox').stop().animate({
+			scrollLeft: leftPoint
+			}, 1000);
 	}
 };
 
@@ -49,7 +65,7 @@ function closePopup( elname ) {
 	}
 };
 
-function centerPopup( elname, scrollto_id ) {
+function centerPopup( elname ) {
 	var windowWidth = document.documentElement.clientWidth;  
 	var windowHeight = document.documentElement.clientHeight;  
 	var popupHeight = $(elname).height();  
@@ -63,13 +79,8 @@ function centerPopup( elname, scrollto_id ) {
 	$("#backgroundPopup").css({
 		"height": windowHeight
 	});
-	// scroll to given ID if asked
-	if( scrollto_id != null ) {
-		$(elname).stop().animate({
-			scrollLeft: $(scrollto_id).offset().left
-			}, 1000);
-	}
 };
+
 $(document).ready( function() {
 	hideApparatus();
 	

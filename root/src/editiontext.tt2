@@ -25,15 +25,15 @@
 	    	<a onclick="hideApparatus()">[x]</a>
 	    </div>
 	</div>
-	<div id="backgroundPopup"></div>
-    <div id="stexaminer_popup"></div>
-    <div id="variantgraph_popup">
-    	<div class="popup_control">
-    		<span class="popupclose" id="vgpopup_close">[x]</span>
-    	</div>
-    	<h3>Variant graph for [% textname %]</h3>
-    	<div id="svgbox">
-    		[% svg %]
-    	</div>
-    </div>
+</div>
+<div id="backgroundPopup"></div>
+<div id="stexaminer_popup"></div>
+<div id="variantgraph_popup">
+	<div class="popup_control">
+		<span class="popupclose" id="vgpopup_close">[x]</span>
+	</div>
+	<h3>Variant graph for [% textname %]</h3>
+	<div id="svgbox">
+		[% svg %]
+	</div>
 </div>
