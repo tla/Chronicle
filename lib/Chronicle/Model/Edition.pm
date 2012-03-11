@@ -16,11 +16,11 @@ has 'sourcefile' => (
 	);
 
 has 'textlist' => (
-	isa => 'HashRef[XML::LibXML::Element]',
+	isa => 'HashRef',
 	traits => ['Hash'],
 	handles => {
 		add_text => 'set',
-		textxml => 'get',
+		textdata => 'get',
 		texts => 'keys',
 		textpairs => 'kv',
 		},
@@ -32,13 +32,20 @@ sub BUILD {
 	my $docroot = $parser->parse_file( $self->sourcefile )->documentElement;
 	my $xpc = _xpc_for_el( $docroot );
 	foreach my $textel ( $xpc->findnodes( '//tei:text[@xml:id]' ) ) {
-		$self->add_text( $textel->getAttribute('xml:id'), $textel );
+		my $textid = $textel->getAttribute('xml:id');
+		my $svg = $self->svg( $textid );
+		my $paragraphs = $self->paragraphs( $textid, $textel );
+		$self->add_text( $textid, { 
+			'textname' => textname( $textel ),
+			'paragraphs' => $paragraphs,
+			'svg' => $svg
+			 });
 	}
 }
 
 sub textname {
-	my( $self, $sigil ) = @_;
-	my $xpc = _xpc_for_el( $self->textxml( $sigil ) );
+	my( $textel ) = @_;
+	my $xpc = _xpc_for_el( $textel );
 	return $xpc->findvalue( 'descendant::tei:head' );
 }
 
@@ -46,23 +53,54 @@ sub get_textlist {
 	my $self = shift;
 	my $ret = [];
 	foreach my $pair ( sort { $a->[0] cmp $b->[0] } $self->textpairs ) {
-		my $xpc = _xpc_for_el( $pair->[1] );
-		push( @$ret, { 'id' => $pair->[0], 'name' => $self->textname( $pair->[0] ) } );
+		push( @$ret, { 'id' => $pair->[0], 'name' => $pair->[1]->{'textname'} } );
 	}
 	return $ret;
 }
 
+sub svg {
+	my( $self, $textid ) = @_;
+	my $svgdir = $self->sourcefile->dir->parent->subdir('svg');
+	open( SVG, "$svgdir/$textid.svg" ) or die "Could not get $textid SVG";
+	binmode SVG, ':encoding(UTF-8)';
+	my $svgstr = '';
+	while( <SVG> ) {
+		chomp;
+		$svgstr .= $_;
+	}
+	close SVG;
+	return $svgstr;
+}
+
+sub svg_obj {
+	my( $self, $textid ) = @_;
+	my $parser = XML::LibXML->new();
+	my $obj = $parser->parse_string( $self->svg( $textid ) );
+	return $obj;
+}
+
 # Return a list of { original: str, translation: str } for each paragraph in the text.
 sub paragraphs {
-	my( $self, $textid ) = @_;
-	my $textel = $self->textxml( $textid );
+	my( $self, $textid, $textel ) = @_;
+	# Make a lookup table of all reading word IDs to svg node IDs
+	my $svg_id_for_word = {};
+	my $svg_obj = $self->svg_obj( $textid );
+	my $sxpc = XML::LibXML::XPathContext->new( $svg_obj->documentElement );
+	$sxpc->registerNs( 'svg', 'http://www.w3.org/2000/svg' );
+	foreach my $n ( $sxpc->findnodes( '//svg:g[@class="node"]' ) ) {
+		my $sid = $n->getAttribute('id');
+		my $nid = $sxpc->findvalue( 'svg:title', $n );
+		$svg_id_for_word->{$nid} = $sid;
+	}
+	
+	# Go through the text XML element and create the HTML paragraphs
 	my $xpc = _xpc_for_el( $textel );
 	my @paragraphs;
 	foreach my $pgel ( $xpc->findnodes( './/tei:p[@xml:id]' ) ) {
 		my $pgid = $pgel->getAttribute( 'xml:id' );
 		my( $pgcorr ) = $xpc->findnodes( ".//tei:p[\@corresp = \"#$pgid\"]" );
 		my $pgdata = {
-			'original' => $self->process_original( $pgel ),
+			'original' => $self->process_original( $pgel, $svg_id_for_word ),
 			'translation' => $self->process_translation( $pgcorr ),
 			};
 		push( @paragraphs, $pgdata );
@@ -71,7 +109,7 @@ sub paragraphs {
 }
 
 sub process_original {
-	my( $self, $pgel ) = @_;
+	my( $self, $pgel, $svg_id_for_word ) = @_;
 	my $xpc = _xpc_for_el( $pgel );
 	my @words;
 	foreach my $app ( $xpc->findnodes( 'descendant::tei:app' ) ) {
@@ -82,6 +120,8 @@ sub process_original {
 		if( $xpc->exists( 'tei:lem/tei:w', $app ) ) {
 			push( @process_apps, $app );
 			my $curr = $app;
+			my ( $lemmaword ) = $xpc->findnodes( 'tei:lem/tei:w[1]', $app );
+			my $svgid = $svg_id_for_word->{ $lemmaword->getAttribute('xml:id') };
 			while( $curr ) {
 				my $next = $xpc->find( 'following-sibling::tei:app[1]', $curr )->pop;
 				if( ref($next) ne 'XML::LibXML::Element' 
@@ -92,7 +132,7 @@ sub process_original {
 					$curr = $next;
 				}
 			}
-			push( @app_words, compose_app_html( $xpc, @process_apps ) );
+			push( @app_words, compose_app_html( $xpc, $svgid, @process_apps ) );
 		} 
 		
 		## Cope with apparatus siglorum
@@ -124,7 +164,7 @@ sub process_original {
 }
 
 sub compose_app_html {
-	my( $xpc, @apps ) = @_;
+	my( $xpc, $svgid, @apps ) = @_;
 	my @words;
 
 	# Get the aggregate lemma and make the list of unique readings and
@@ -174,7 +214,8 @@ sub compose_app_html {
 	my @spanclass;
 	my @jsfuncts;
 	if( keys %readings ) {
-		my @js_arguments = ( "'$lemmatext'" );
+		my $svg_idstr = $svgid ? "'#$svgid'" : "null";
+		my @js_arguments = ( "'$lemmatext'", $svg_idstr );
 		foreach my $rdgtext ( keys %readings ) {
 			my @listargs = ( $rdgtext );
 			push( @listargs, @{$readings{$rdgtext}} );

@@ -147,7 +147,7 @@ a:active {
 	text-decoration: underline;
 	cursor: pointer;
 }
-#apparatusdisplay {
+#apparatusbox {
 	position: relative;
 	float: left;
 	width: 45%;
@@ -157,6 +157,16 @@ a:active {
 	z-index: 1;
 	background-color: #f2f2f2;
 	padding: 3px 10px;
+}
+#apparatusdisplay {
+	float: left;
+	width: 75%;
+}
+#apparatuscontrol {
+	float: right;
+	text-align: right;
+	width: 25%;
+	font-size: 75%;
 }
 .selectedlemma {
 	background-color: #ffffa0;
@@ -172,7 +182,7 @@ a:active {
 .appwitlist {
 	margin-left: 10px;
 }
-#notedisplay {
+#notebox {
 	position: relative;
 	float: left;
 	bottom: 15px;
@@ -183,6 +193,47 @@ a:active {
 	z-index: 1;
 	background-color: #f2f2f2;
 	padding: 3px 10px;
+}
+#notedisplay {
+	float: left;
+	width: 95%;
+}
+#notecontrol {
+	float: right;
+	text-align: right;
+	width: 5%;
+	font-size: 75%;
+}
+/* Popups */
+#backgroundPopup {
+	display: none;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background: #000000;
+	border: 1px solid #cecece;
+	z-index: 1;
+}
+#variantgraph_popup {
+	display: none;
+	height: 600px;
+	width: 900px;
+	z-index: 2;
+	background: white;
+}
+#svgbox {
+	height: 550px;
+	overflow: scroll;
+}
+#stexaminer_popup {
+	display: none;
+	height: 500px;
+	width: 700px;
+}
+.popup_control {
+	float: right;
 }
 
 /* Layout for witness display pages */

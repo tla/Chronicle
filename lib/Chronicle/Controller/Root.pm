@@ -43,9 +43,10 @@ Display the text, translation, and apparatus for the given text excerpt.
 sub text :Local :Args(1) {
 	my( $self, $c, $textid ) = @_;
 	my $m = $c->model('Edition');
-	$c->stash->{'textname'} = $m->textname( $textid );
-	$c->stash->{'paragraphs'} = $m->paragraphs( $textid );
+	my $d = $m->textdata( $textid );
+	map { $c->stash->{$_} = $d->{$_} } keys %$d;
 	$c->stash->{'template'} = 'editiontext.tt2';
+	$c->forward('View::TT');
 }
 
 =head2 witness/$wit
@@ -61,7 +62,6 @@ sub witness :Chained('/') :PathPart :CaptureArgs(1) {
 
 sub wit_display :PathPart('') :Chained('witness') :Args(0) {
 	my( $self, $c ) = @_;
-	$DB::single = 1;
 	my $wit = delete $c->stash->{'witness'};
 	my $m = $c->model('Witness');
 	$c->stash->{'pagetitle'} = 'Source view';

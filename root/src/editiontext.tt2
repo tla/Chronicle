@@ -10,6 +10,30 @@
         [% END -%]
         </table>
     </div>
-    <div id="apparatusdisplay"></div>
-    <div id="notedisplay"></div>
+    <div id="apparatusbox">
+    	<div id="apparatusdisplay"></div>
+    	<div id="apparatuscontrol">
+    		<a onclick="hideApparatus()">[x]</a><br/>
+    		&nbsp;<br/>
+    		<a id="graphlink">Variant graph</a><br/>
+    		<a id="stemmalink" href="">Stemma</a>
+    	</div>
+    </div>
+    <div id="notebox">
+	    <div id="notedisplay"></div>
+	    <div id="notecontrol">
+	    	<a onclick="hideApparatus()">[x]</a>
+	    </div>
+	</div>
+	<div id="backgroundPopup"></div>
+    <div id="stexaminer_popup"></div>
+    <div id="variantgraph_popup">
+    	<div class="popup_control">
+    		<span class="popupclose" id="vgpopup_close">[x]</span>
+    	</div>
+    	<h3>Variant graph for [% textname %]</h3>
+    	<div id="svgbox">
+    		[% svg %]
+    	</div>
+    </div>
 </div>
