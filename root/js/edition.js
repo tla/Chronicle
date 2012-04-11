@@ -4,23 +4,36 @@ function showApparatus() {
 	var svgid = args.shift();
 	var content = '<span class="apparatuslemma">' + lemma + '</span><br/>';
 	jQuery.each( args, function( index, rdgset ) {
-		content = content + '<span class="appreading">' + rdgset.shift() + '</span>&nbsp;';
-		content = content + '<span class="appwitlist">' + rdgset.join(', ') + '</span><br/>';
+		var reading = rdgset[0];
+		var witnesses = rdgset.slice(1);
+		if( reading != lemma ) {
+			content = content + '<span class="appreading">' + reading + '</span>&nbsp;';
+			content = content + '<span class="appwitlist">' + witnesses.join(', ') + '</span><br/>';
+		}
 	});
 	hideApparatus();
 	$('#apparatusdisplay').append( content );
 	$('#graphlink').click( function() {
 		centerPopup('#variantgraph_popup');
-		showPopup('#variantgraph_popup', svgid );
+		showPopup('#variantgraph_popup', function() { scrollGraph( svgid ) });
 	});
-	$('#apparatusbox').show();
+	$('#stemmalink').click( function() {
+		centerPopup('#stemma_popup');
+		showPopup('#stemma_popup', function() { colorStemma( lemma, args ) });
+	});
+	$('#apparatusbox').show( 0, function () { alignFootnote( $(this) ) });
+};
+
+function alignFootnote( elobj ) {
+	var thisHeight = elobj.height();
+	elobj.css({'bottom': thisHeight });
 };
 
 function showNote( notetext ) {
 	content = '<span class="notetext">' + notetext + '</span><br/>';
 	$('#notedisplay').empty();
 	$('#notedisplay').append( content );
-	$('#notebox').show();
+	$('#notebox').show( 0, function () { alignFootnote( $(this) ) });
 };
 
 function hideApparatus() {
@@ -29,19 +42,6 @@ function hideApparatus() {
 	$('#notedisplay').empty();
 	$('#notebox').hide();	
 	$('.lemma').removeClass('selectedlemma');
-};
-
-var popped = null;
-function showPopup( elname, scrollto_id ) {
-	if( popped != elname ) {
-		$('#backgroundPopup').css({ "opacity": "0.7" });
-		$('#backgroundPopup').fadeIn("slow");
-		$(elname).fadeIn("slow");
-		popped = elname;
-	}
-	if( elname == '#variantgraph_popup' ) {
-		scrollGraph( scrollto_id );
-	}
 };
 
 function scrollGraph( scrollto_id ) {
@@ -55,6 +55,61 @@ function scrollGraph( scrollto_id ) {
 			scrollLeft: leftPoint
 			}, 1000);
 	}
+};
+
+function colorStemma( lemma, groups ) {
+	// List of colors for different variants - how many do we have max?
+	var colors = ['#afc6e9','#d5fff6','#ffccaa','#ffaaaa','#e5ff80','#e5d5ff','#ffd5e5'];
+	// Make the index of color -> reading
+	var colormap = {};
+	colormap[lemma] = '#ffeeaa';
+
+	// First color all nodes grey, then color variant nodes.
+	var all_mss = $('#stemma_popup .node').children('title');
+	color_greynodes( all_mss, function () {
+		jQuery.each( groups, function( set_index, rdgset ) {
+			var reading = rdgset.shift();
+			if( reading != lemma ) {
+				colormap[reading] = colors[set_index];
+			}
+			jQuery.each( rdgset, function(index,value) {
+				all_mss.filter( function(index) {
+					return $(this).text() == value;
+				}).siblings('ellipse').each( function( index ) {
+				$(this).siblings('text').each( function() {
+					$(this).attr( {stroke:'none', fill:'black'} )});
+				$(this).attr( {stroke:'black', fill:colormap[reading]} );
+				});
+      		});
+      	});
+	});
+	
+	// Now make the colorcode key.
+	var colorkey = '';
+	jQuery.each( colormap, function( reading, color ) {
+		colorkey = colorkey + '<span class="colorpatch" style="padding-left: 15px; background-color:'
+			+ color + '">&nbsp;</span>&nbsp;' + reading + '<br/>';
+	});
+	$('#stemma_colorkey').empty();
+	$('#stemma_colorkey').append( colorkey );
+};
+
+function color_greynodes( group, callback_fn ) {
+	group.siblings('ellipse, polygon, text').each( function( index ) {
+        $(this).attr( {stroke:'#ddd', fill:'#f8f8f8'} );
+      });
+    callback_fn.call();
+};
+
+var popped = null;
+function showPopup( elname, callback_fn ) {
+	if( popped != elname ) {
+		$('#backgroundPopup').css({ "opacity": "0.7" });
+		$('#backgroundPopup').fadeIn("slow");
+		$(elname).fadeIn("slow");
+		popped = elname;
+	}
+	callback_fn.call();
 };
 
 function closePopup( elname ) {
@@ -86,6 +141,9 @@ $(document).ready( function() {
 	
 	$("#vgpopup_close").click( function() {
 		closePopup( '#variantgraph_popup' );
+	});
+	$("#sgpopup_close").click( function() {
+		closePopup( '#stemma_popup' );
 	});
 	$(document).keypress( function(e) {
 		if( e.keyCode == 27 && popped != null ) {
