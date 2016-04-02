@@ -33,12 +33,11 @@ sub BUILD {
 	my $xpc = _xpc_for_el( $docroot );
 	foreach my $textel ( $xpc->findnodes( '//tei:text[@xml:id]' ) ) {
 		my $textid = $textel->getAttribute('xml:id');
-		my $svg = $self->svg( $textid );
-		my $paragraphs = $self->paragraphs( $textid, $textel );
 		$self->add_text( $textid, { 
 			'textname' => textname( $textel ),
-			'paragraphs' => $paragraphs,
-			'svg' => $svg
+			'paragraphs' => $self->paragraphs( $textid, $textel ),
+			'svg' => $self->svg( $textid ),
+			'stemmasvg' => $self->stemma(),
 			 });
 	}
 }
@@ -58,10 +57,22 @@ sub get_textlist {
 	return $ret;
 }
 
+## Eventually there might be separate stemmata for the different text parts.
+sub stemma {
+	my $self = shift;
+	my $svgdir = $self->sourcefile->dir->parent->subdir('svg');
+	return _read_svg( "$svgdir/stemma.svg" );
+}	
+
 sub svg {
 	my( $self, $textid ) = @_;
 	my $svgdir = $self->sourcefile->dir->parent->subdir('svg');
-	open( SVG, "$svgdir/$textid.svg" ) or die "Could not get $textid SVG";
+	return _read_svg( "$svgdir/$textid.svg" );
+}
+
+sub _read_svg {
+	my $filename = shift;
+	open( SVG, "$filename" ) or die "Could not get SVG from $filename";
 	binmode SVG, ':encoding(UTF-8)';
 	my $svgstr = '';
 	while( <SVG> ) {
@@ -70,6 +81,7 @@ sub svg {
 	}
 	close SVG;
 	return $svgstr;
+	
 }
 
 sub svg_obj {
@@ -198,8 +210,6 @@ sub compose_app_html {
 	my %readings;
 	foreach my $wit ( keys %wit_rdgs ) {
 		my $rdgtext = join( ' ', @{$wit_rdgs{$wit}} );
-		# Don't list the lemma witnesses
-		next if $rdgtext eq $lemmatext;
 		# Strip punctuation
 		$rdgtext =~ s/[[:punct:]]//g;
 		# Fill in something for omissions
@@ -209,11 +219,12 @@ sub compose_app_html {
 	
 	# Arrange the readings and notes into our JS arguments
 	# Function will be:
-	# showApparatus( lemmatext, [ reading, wit, wit ], [ reading, wit, wit ], ... )
+	# showApparatus( lemmatext, svgid, [ lemmatext, wit, wit ], [ reading, wit, wit ], 
+	#				 [ reading, wit, wit ], ... )
 	# showNote( note1, note2, ... )
 	my @spanclass;
 	my @jsfuncts;
-	if( keys %readings ) {
+	if( keys %readings > 1 ) {
 		my $svg_idstr = $svgid ? "'#$svgid'" : "null";
 		my @js_arguments = ( "'$lemmatext'", $svg_idstr );
 		foreach my $rdgtext ( keys %readings ) {

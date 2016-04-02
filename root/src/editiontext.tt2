@@ -9,6 +9,7 @@
             </tr>
         [% END -%]
         </table>
+        <div id="bottomspace">&nbsp;</div>
     </div>
     <div id="apparatusbox">
     	<div id="apparatusdisplay"></div>
@@ -16,7 +17,7 @@
     		<a onclick="hideApparatus()">[x]</a><br/>
     		&nbsp;<br/>
     		<a id="graphlink">Variant graph</a><br/>
-    		<a id="stemmalink" href="">Stemma</a>
+    		<a id="stemmalink">Stemma display</a>
     	</div>
     </div>
     <div id="notebox">
@@ -27,7 +28,16 @@
 	</div>
 </div>
 <div id="backgroundPopup"></div>
-<div id="stexaminer_popup"></div>
+<div id="stemma_popup">
+	<div class="popup_control">
+		<span class="popupclose" id="sgpopup_close">[x]</span>
+	</div>
+	<h3>Stemma for the <i>Chronicle</i></h3>
+	<div id="stemma_colorkey"></div>
+	<div id="stemmabox">
+		[% stemmasvg %]
+	</div>
+</div>
 <div id="variantgraph_popup">
 	<div class="popup_control">
 		<span class="popupclose" id="vgpopup_close">[x]</span>
